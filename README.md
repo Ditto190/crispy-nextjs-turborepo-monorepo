@@ -10,6 +10,8 @@ A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Expre
 - **Tailwind CSS 4** with shadcn/ui components
 - **TypeScript 6** with strict mode across all packages
 - **ESLint 10** with flat config (`.ts` config files), Prettier, and perfectionist
+- **GitHub Actions CI/CD** with lint, build, type-check, and optional tests
+- **Codespaces + VS Code workspace** pre-configured for monorepo development
 
 ## Project Structure
 
@@ -59,6 +61,36 @@ A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Expre
    ```bash
    pnpm lint
    ```
+
+6. **Type-check shared packages**
+
+   ```bash
+   pnpm -r --if-present check-types
+   ```
+
+## CI/CD
+
+- `/.github/workflows/ci-cd.yml` runs out-of-the-box checks on pull requests and pushes:
+  - `pnpm lint`
+  - `pnpm build`
+  - `pnpm -r --if-present check-types`
+  - `pnpm -r --if-present test`
+- On `main`, the workflow also uploads build artifacts (`apps/server/dist`, `apps/web/.next`) as a delivery-ready foundation.
+
+## VS Code + Codespaces
+
+- Open this repository in GitHub Codespaces to use `/.devcontainer/devcontainer.json`.
+- Use the included `monorepo.code-workspace` for a pre-configured multi-root workspace.
+- Existing `.vscode` settings and extension recommendations are included for local VS Code usage.
+
+## Expanding to Nuxt and other frameworks
+
+This monorepo already supports framework expansion via:
+
+- `pnpm-workspace.yaml` (`apps/*`, `packages/*`)
+- Turborepo task orchestration in `turbo.json`
+
+To add Nuxt (or another framework app), create a new folder under `apps/` (for example `apps/nuxt`) and add package scripts (`dev`, `build`, `lint`, optional `test`) so it participates in shared workspace and CI checks automatically.
 
 ## Tech Stack
 

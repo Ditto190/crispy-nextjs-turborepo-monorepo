@@ -1,7 +1,10 @@
 {
-    "recommendations": [
-      "yoavbls.pretty-ts-errors",
-      "bradlc.vscode-tailwindcss",
-    ]
-  }
-  
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "github.vscode-github-actions",
+    "vue.volar",
+    "yoavbls.pretty-ts-errors"
+  ]
+}
