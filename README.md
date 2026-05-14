@@ -150,7 +150,7 @@ export const Default: Story = {
 | `pnpm build`             | Builds the apps with `build` scripts, including the Storybook static site   |
 | `pnpm lint`              | Lints all packages                                                          |
 | `pnpm preview-storybook` | Builds and serves the Storybook static output                               |
-| `pnpm clean`             | Removes all build artifacts and `node_modules`                              |
+| `pnpm clean`             | Runs available `clean` scripts; currently only cleans `apps/docs` artifacts |
 
 ## CI/CD
 
