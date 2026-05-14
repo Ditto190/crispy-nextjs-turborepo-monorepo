@@ -41,3 +41,5 @@ echo "Linting changed workspaces against $BASE_REF: ${workspaces[*]}"
 for workspace in "${workspaces[@]}"; do
   pnpm --filter "./$workspace" --if-present lint
 done
+
+echo "✅ Changed workspace linting completed."

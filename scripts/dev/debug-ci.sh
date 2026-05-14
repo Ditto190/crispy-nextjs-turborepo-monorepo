@@ -43,3 +43,4 @@ else
   pnpm -r --if-present test
 fi
 
+echo "✅ Debug CI checks completed successfully."

@@ -47,3 +47,5 @@ else
     install_relaxed
   fi
 fi
+
+echo "✅ Bootstrap completed successfully."

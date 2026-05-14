@@ -41,3 +41,5 @@ echo "Testing changed workspaces against $BASE_REF: ${workspaces[*]}"
 for workspace in "${workspaces[@]}"; do
   pnpm --filter "./$workspace" --if-present test
 done
+
+echo "✅ Changed workspace tests completed."
