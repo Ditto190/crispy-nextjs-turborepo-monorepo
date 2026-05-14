@@ -41,7 +41,7 @@ elif [[ "$mode" == "relaxed" ]]; then
   echo "Installing dependencies with --no-frozen-lockfile..."
   install_relaxed
 else
-  echo "Installing dependencies with --frozen-lockfile (fallbacks to --no-frozen-lockfile)..."
+  echo "Installing dependencies with --frozen-lockfile (falls back to --no-frozen-lockfile)..."
   if ! install_frozen; then
     echo "Frozen install failed. Retrying with --no-frozen-lockfile for local bootstrap."
     install_relaxed
