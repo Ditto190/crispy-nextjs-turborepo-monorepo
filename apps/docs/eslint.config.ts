@@ -6,6 +6,9 @@ import baseConfig from "../../eslint.config.ts";
 const config: Linter.Config[] = [
   ...baseConfig,
   {
+    ignores: ["storybook-static/**"],
+  },
+  {
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -14,7 +17,6 @@ const config: Linter.Config[] = [
       },
     },
     files: ["stories/**/*.tsx", ".storybook/**/*.ts"],
-    ignores: ["node_modules/**", "storybook-static/**"],
   },
 ];
 
