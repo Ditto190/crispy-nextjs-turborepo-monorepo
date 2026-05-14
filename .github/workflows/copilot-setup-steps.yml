@@ -1,0 +1,66 @@
+name: "Copilot Setup Steps"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # This job name is required for GitHub Copilot Agent recognition
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install gh-aw extension
+        uses: github/gh-aw-actions/setup-cli@b8068426813005612b960b5ab0b8bd2c27142323 # v0.71.5
+        with:
+          version: v0.71.5
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify workspace structure
+        run: |
+          test -f package.json
+          test -f pnpm-workspace.yaml
+          test -f turbo.json
+          test -d apps
+          test -d packages
+
+      - name: Lint repository
+        run: pnpm lint
+
+      - name: Build repository
+        run: pnpm build
+
+      - name: Type check packages and apps
+        run: pnpm -r --if-present check-types
+
+      - name: Run tests if present
+        run: pnpm -r --if-present test
+
+      - name: Print workspace summary
+        run: |
+          echo "Apps:"
+          find apps -maxdepth 2 -name package.json | sort
+          echo ""
+          echo "Packages:"
+          find packages -maxdepth 2 -name package.json | sort
