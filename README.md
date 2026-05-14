@@ -167,6 +167,14 @@ export const Default: Story = {
 - Use the included `monorepo.code-workspace` for a pre-configured multi-root workspace.
 - Existing `.vscode` settings and extension recommendations are included for local VS Code usage.
 
+## Repository governance and agent autonomy
+
+- Repository policy files:
+  - `/.github/CODEOWNERS`
+  - `/.github/BRANCH_RULESETS.md`
+  - `/docs/repository-governance.md`
+- Apply the documented rulesets and Copilot/Actions settings in GitHub UI to enable autonomous PRs, triage/debug workflows, and conflict-free auto-merge with required safeguards.
+
 ## Expanding to Nuxt and other frameworks
 
 This monorepo already supports framework expansion via:

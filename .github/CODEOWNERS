@@ -1,0 +1,26 @@
+# Repository fallback owner
+* @Ditto190
+
+# Critical automation and governance
+/.github/** @Ditto190
+/.github/workflows/* @Ditto190
+/.devcontainer/** @Ditto190
+
+# Root monorepo configuration
+/package.json @Ditto190
+/pnpm-lock.yaml @Ditto190
+/pnpm-workspace.yaml @Ditto190
+/turbo.json @Ditto190
+/tsconfig.json @Ditto190
+/eslint.config.ts @Ditto190
+/monorepo.code-workspace @Ditto190
+
+# Applications
+/apps/docs/** @Ditto190
+/apps/server/** @Ditto190
+/apps/web/** @Ditto190
+
+# Shared packages
+/packages/types/** @Ditto190
+/packages/ui/** @Ditto190
+/packages/utils/** @Ditto190
