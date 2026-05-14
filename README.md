@@ -161,6 +161,23 @@ export const Default: Story = {
   - `pnpm -r --if-present test`
 - On `main`, the workflow also uploads build artifacts (`apps/server/dist`, `apps/web/.next`) as a delivery-ready foundation.
 
+## GitHub Agentic Workflows
+
+This repo now includes a starter `gh aw` authoring bundle:
+
+- repo-local guidance in `/.github/aw/`
+- markdown workflow sources in `/.github/workflows/*.md`
+- starter flows for issue triage, PR review help, and failure debugging
+
+To maintain them:
+
+1. install the CLI extension with `gh extension install github/gh-aw`
+2. edit the markdown sources
+3. run `gh aw compile` after frontmatter changes
+4. commit both the `.md` source and generated `.lock.yml` files
+
+The starter is intentionally conservative: issue triage is automatic, while review/debug helpers are command-driven (`/review-helper`, `/debug-ci`) so a public starter repo can adopt them safely. See `/.github/aw/README.md` for setup details, safe-output notes, and label requirements.
+
 ## VS Code + Codespaces
 
 - Open this repository in GitHub Codespaces to use `/.devcontainer/devcontainer.json`.
