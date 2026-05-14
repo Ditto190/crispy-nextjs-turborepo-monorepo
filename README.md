@@ -147,7 +147,7 @@ export const Default: Story = {
 | Script                   | What it does                                                                |
 | ------------------------ | --------------------------------------------------------------------------- |
 | `pnpm dev`               | Runs all `dev` scripts in parallel (Next.js + Express.js + Storybook)       |
-| `pnpm build`             | Builds all packages and apps (including Storybook static site)              |
+| `pnpm build`             | Builds the apps with `build` scripts, including the Storybook static site   |
 | `pnpm lint`              | Lints all packages                                                          |
 | `pnpm preview-storybook` | Builds and serves the Storybook static output                               |
 | `pnpm clean`             | Removes all build artifacts and `node_modules`                              |
