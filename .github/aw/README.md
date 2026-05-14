@@ -54,8 +54,6 @@ Create these labels before relying on the starter triage flows:
 - `needs-info`
 - `needs-reproduction`
 - `good-first-issue`
-- `review-needed`
-- `ci`
 
 `gh aw` can create referenced labels during maintenance runs, or you can create them manually in repository settings.
 
