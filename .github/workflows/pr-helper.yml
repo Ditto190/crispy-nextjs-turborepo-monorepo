@@ -1,0 +1,89 @@
+name: PR Helper
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create/update PR diagnostics comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- autonomy-pr-helper -->';
+            const pr = context.payload.pull_request;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = pr.number;
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number: issue_number,
+              per_page: 100,
+            });
+
+            const changedWorkspaces = [...new Set(
+              files
+                .map((f) => f.filename)
+                .map((name) => name.match(/^(apps|packages)\/([^/]+)/))
+                .filter(Boolean)
+                .map((m) => `${m[1]}/${m[2]}`)
+            )].sort();
+
+            const changedWorkflowFiles = files
+              .map((f) => f.filename)
+              .filter((name) => name.startsWith('.github/workflows/'));
+
+            const body = [
+              marker,
+              '## Autonomy PR diagnostics',
+              '',
+              `- Changed files: **${files.length}**`,
+              `- Changed workspaces: ${changedWorkspaces.length ? changedWorkspaces.map((w) => `\`${w}\``).join(', ') : '_none detected_'}`,
+              `- Workflow files touched: ${changedWorkflowFiles.length ? changedWorkflowFiles.map((w) => `\`${w}\``).join(', ') : '_none_'}`,
+              '',
+              '### Suggested local checks',
+              '- `scripts/dev/doctor.sh`',
+              '- `scripts/dev/lint-changed.sh`',
+              '- `scripts/dev/test-changed.sh`',
+              '- `scripts/dev/debug-ci.sh quick`',
+              '',
+              '### Reviewer checklist',
+              '- [ ] Changed workspace scope is correct',
+              '- [ ] Lint/test scope aligns with changed files',
+              '- [ ] Workflow permission changes (if any) are least-privilege',
+            ].join('\n');
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100,
+            });
+
+            const existing = comments.find(
+              (comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body,
+              });
+            }
