@@ -2,12 +2,16 @@
 
 A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Express.js**, **Tailwind CSS**, **shadcn**, and **ESLint**. Based on [The Halftime Code](https://www.thehalftimecode.com/building-a-full-stack-monorepo-with-turbopack-biome-next-js-express-js-tailwind-css-and-shadcn/) tutorial.
 
+This template includes a **baked-in design system** powered by Storybook, so you can develop, document, and showcase shared UI components alongside your Next.js app in the same monorepo.
+
 ## Features
 
 - **Monorepo** managed by Turborepo with pnpm workspaces
 - **Next.js 16** frontend with React 19 and Turbopack
 - **Express.js** backend with TypeScript
 - **Tailwind CSS 4** with shadcn/ui components
+- **Design system** via `packages/ui` — shared React component library
+- **Storybook 8** docs app (`apps/docs`) for component development and documentation
 - **TypeScript 6** with strict mode across all packages
 - **ESLint 10** with flat config (`.ts` config files), Prettier, and perfectionist
 - **GitHub Actions CI/CD** with lint, build, type-check, and optional tests
@@ -17,12 +21,13 @@ A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Expre
 
 ```
 /apps
-  /web          — Next.js frontend
+  /web          — Next.js frontend (consumes @monorepo/ui)
   /server       — Express.js backend
+  /docs         — Storybook component docs (design system playground)
 
 /packages
   /types        — Shared types and API client
-  /ui           — shadcn component library (Tailwind CSS)
+  /ui           — shadcn-based design system (Tailwind CSS 4)
   /utils        — Shared utility functions
 ```
 
@@ -31,8 +36,8 @@ A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Expre
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/ivesfurtado/next-express-turborepo.git
-   cd next-express-turborepo
+   git clone https://github.com/Ditto190/crispy-nextjs-turborepo-monorepo.git
+   cd crispy-nextjs-turborepo-monorepo
    ```
 
 2. **Install dependencies**
@@ -49,6 +54,7 @@ A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Expre
 
    - Frontend: `http://localhost:3000`
    - Backend: `http://localhost:3001`
+   - Storybook: `http://localhost:6006`
 
 4. **Build for production**
 
@@ -67,6 +73,84 @@ A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Expre
    ```bash
    pnpm -r --if-present check-types
    ```
+
+## Design System Workflow
+
+The monorepo ships with a shared component library (`packages/ui`) and a Storybook docs app (`apps/docs`) for developing and documenting those components.
+
+### Working with shared components
+
+Components live in `packages/ui/src/components/`. They are built with [shadcn/ui](https://ui.shadcn.com) patterns and Tailwind CSS 4.
+
+**Add a new shadcn component to the library:**
+
+```bash
+pnpm add-shadcn-component <component-name>
+```
+
+**Import a shared component in your Next.js app:**
+
+```tsx
+import { Button } from "@monorepo/ui/components/button";
+
+export default function Page() {
+  return <Button variant="outline">Hello from the design system</Button>;
+}
+```
+
+### Storybook — component docs and playground
+
+Start Storybook locally:
+
+```bash
+pnpm --filter docs dev
+# or run all dev servers including Storybook:
+pnpm dev
+```
+
+Build the static Storybook site:
+
+```bash
+pnpm --filter docs build
+```
+
+Preview the static Storybook build:
+
+```bash
+pnpm preview-storybook
+```
+
+### Adding a new story
+
+Create a file in `apps/docs/stories/` following the CSF (Component Story Format):
+
+```tsx
+// apps/docs/stories/input.stories.tsx
+import type { Meta, StoryObj } from "@storybook/react";
+import { Input } from "@monorepo/ui/components/input";
+
+const meta: Meta<typeof Input> = {
+  component: Input,
+  title: "UI/Input",
+};
+export default meta;
+
+type Story = StoryObj<typeof Input>;
+
+export const Default: Story = {
+  args: { placeholder: "Type something..." },
+};
+```
+
+### Turbo pipeline — how tasks connect
+
+| Script                   | What it does                                                                |
+| ------------------------ | --------------------------------------------------------------------------- |
+| `pnpm dev`               | Runs all `dev` scripts in parallel (Next.js + Express.js + Storybook)       |
+| `pnpm build`             | Builds the apps with `build` scripts, including the Storybook static site   |
+| `pnpm lint`              | Lints all packages                                                          |
+| `pnpm preview-storybook` | Builds and serves the Storybook static output                               |
+| `pnpm clean`             | Runs available `clean` scripts; currently only cleans `apps/docs` artifacts |
 
 ## CI/CD
 
@@ -94,13 +178,14 @@ To add Nuxt (or another framework app), create a new folder under `apps/` (for e
 
 ## Tech Stack
 
-| Layer    | Technology                                       |
-| -------- | ------------------------------------------------ |
-| Frontend | Next.js 16, React 19, Tailwind CSS 4, shadcn/ui  |
-| Backend  | Express.js, TypeScript                           |
-| Build    | Turborepo, pnpm workspaces                       |
-| Linting  | ESLint 10 (flat config), Prettier, perfectionist |
-| Language | TypeScript 6 (strict)                            |
+| Layer         | Technology                                       |
+| ------------- | ------------------------------------------------ |
+| Frontend      | Next.js 16, React 19, Tailwind CSS 4, shadcn/ui  |
+| Backend       | Express.js, TypeScript                           |
+| Design System | packages/ui (shadcn), Storybook 8                |
+| Build         | Turborepo, pnpm workspaces                       |
+| Linting       | ESLint 10 (flat config), Prettier, perfectionist |
+| Language      | TypeScript 6 (strict)                            |
 
 ## License
 

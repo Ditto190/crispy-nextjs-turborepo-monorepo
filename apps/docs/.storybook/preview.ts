@@ -1,0 +1,1 @@
+import "@monorepo/ui/globals.css";
