@@ -22,7 +22,7 @@ A full-stack monorepo starter template using **Turborepo**, **Next.js**, **Expre
 
 /packages
   /types        — Shared types and API client
-  /ui           — shadcn component library (Tailwind CSS)
+  /ui           — shadcn component library (Tailwind CSS + dashboard-safe registry/presets)
   /utils        — Shared utility functions
 ```
 
