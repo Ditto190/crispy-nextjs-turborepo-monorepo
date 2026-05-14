@@ -106,6 +106,20 @@ To add Nuxt (or another framework app), create a new folder under `apps/` (for e
 
 MIT
 
+## Dashboard Integration
+
+This monorepo is being extended with a WorldMonitor-inspired dashboard built natively across the monorepo package boundaries. See the full file-by-file plan at:
+
+**[`docs/dashboard-integration-plan.md`](./docs/dashboard-integration-plan.md)**
+
+The plan covers:
+
+- Shared dashboard type contracts in `packages/types`
+- Reusable dashboard UI primitives in `packages/ui`
+- Preset data endpoints in `apps/server`
+- Dashboard route and page composition in `apps/web`
+- Contract guardrail tests across all packages
+
 ## Further Reading
 
 For further details on building and setting up this monorepo, check out the original tutorial on [The Halftime Code](https://www.thehalftimecode.com/building-a-full-stack-monorepo-with-turbopack-biome-next-js-express-js-tailwind-css-and-shadcn/).
