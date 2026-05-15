@@ -1,0 +1,44 @@
+name: Debug CI Helper
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Debug mode
+        required: true
+        type: choice
+        options:
+          - quick
+          - full
+        default: quick
+      base_ref:
+        description: Base ref for changed-scope scripts (quick mode)
+        required: false
+        default: origin/main
+
+permissions:
+  contents: read
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Bootstrap workspace
+        run: scripts/dev/bootstrap.sh --no-frozen-lockfile
+
+      - name: Run CI debug helper
+        run: scripts/dev/debug-ci.sh "${{ github.event.inputs.mode }}" "${{ github.event.inputs.base_ref }}"

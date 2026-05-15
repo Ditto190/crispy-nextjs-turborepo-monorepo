@@ -160,12 +160,45 @@ export const Default: Story = {
   - `pnpm -r --if-present check-types`
   - `pnpm -r --if-present test`
 - On `main`, the workflow also uploads build artifacts (`apps/server/dist`, `apps/web/.next`) as a delivery-ready foundation.
+- `/.github/workflows/issue-triage.yml` provides safe issue triage support (labeling + helpful intake comment).
+- `/.github/workflows/pr-helper.yml` posts a PR diagnostics summary including changed workspace scope and reviewer checklist.
+- `/.github/workflows/debug-ci-helper.yml` allows manual CI-debug runs from the Actions UI (`quick` changed-scope or `full` parity mode).
 
 ## VS Code + Codespaces
 
 - Open this repository in GitHub Codespaces to use `/.devcontainer/devcontainer.json`.
 - Use the included `monorepo.code-workspace` for a pre-configured multi-root workspace.
 - Existing `.vscode` settings and extension recommendations are included for local VS Code usage.
+- The devcontainer runs:
+  - `/.devcontainer/postCreate.sh` to bootstrap dependencies and run environment diagnostics
+  - `/.devcontainer/postStart.sh` to ensure workspace readiness and print useful commands
+
+## Dev Toolkit (`scripts/dev`)
+
+The repository includes helper scripts designed for repeatable local/Codespaces setup and agent workflows:
+
+- `scripts/dev/bootstrap.sh`
+  - Enables Corepack and installs dependencies.
+  - Uses `--frozen-lockfile` in CI mode and supports local fallback (`--no-frozen-lockfile`) when lockfile drift exists.
+- `scripts/dev/doctor.sh`
+  - Validates required tools and monorepo assumptions (Node, pnpm, git refs, turbo availability, key root files).
+- `scripts/dev/lint-changed.sh [base-ref]`
+  - Detects changed workspaces under `apps/*` and `packages/*` against `origin/main` (or provided base ref) and lints only those.
+  - Falls back to full `pnpm lint` when changed-scope detection is unavailable.
+- `scripts/dev/test-changed.sh [base-ref]`
+  - Runs tests only for changed workspaces when possible.
+  - Falls back to `pnpm -r --if-present test` when workspace detection is unavailable.
+- `scripts/dev/debug-ci.sh [quick|full] [base-ref]`
+  - `quick`: doctor + lockfile parity check + changed-scope lint/tests.
+  - `full`: full CI-like sequence (`lint`, `build`, `check-types`, and tests when present).
+
+## Assumptions, limitations, and next steps
+
+- Changed-scope scripts only map files inside `apps/*` and `packages/*`; cross-cutting root/config changes trigger full-task fallbacks.
+- `debug-ci.sh` intentionally validates `pnpm install --frozen-lockfile` first, because lockfile drift is a common CI failure mode.
+- Recommended follow-up:
+  - add/standardize labels such as `needs-triage`, `ci`, `documentation`, `bug`, `enhancement`, `question` to maximize issue triage workflow value
+  - optionally enforce `.github/workflows/*` protection through CODEOWNERS + branch rulesets
 
 ## Expanding to Nuxt and other frameworks
 

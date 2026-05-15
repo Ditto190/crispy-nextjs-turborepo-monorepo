@@ -1,14 +1,29 @@
 {
   "name": "crispy-nextjs-turborepo-monorepo",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
-  "postCreateCommand": "corepack enable && pnpm install",
+  "remoteUser": "node",
+  "mounts": [
+    "source=pnpm-store,target=/home/node/.local/share/pnpm/store,type=volume"
+  ],
+  "postCreateCommand": "bash .devcontainer/postCreate.sh",
+  "postStartCommand": "bash .devcontainer/postStart.sh",
   "customizations": {
     "vscode": {
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "eslint.packageManager": "pnpm",
+        "typescript.tsdk": "node_modules/typescript/lib"
+      },
       "extensions": [
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
+        "github.copilot",
+        "github.copilot-chat",
         "github.vscode-github-actions",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers",
         "vue.volar",
         "yoavbls.pretty-ts-errors"
       ]
